@@ -7,133 +7,94 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task 03</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
         .form-group {
-            margin: 4px 10px;
-            display: inline-block;
+            margin: 12px 4px;
         }
 
         .form-group label {
             display: block;
         }
 
-        [type=button] {
-            margin: 10px;
+        .form-group label.inline {
+            display: inline-block;
         }
 
-        table {
-            margin: 10px
+        /* :valid - псевдокласс находит элементы, которые прошли валидацию */
+        input:valid {
+            border: 1px solid green;
         }
 
-        table,
-        th,
-        td {
-            border: 1px solid black;
-        }
-
-        td,
-        th {
-            padding: 8px;
+        /* :invalid - псевдокласс находит элементы, которые не прошли валидацию */
+        input:invalid {
+            border: 1px solid red;
         }
     </style>
 </head>
 
 <body>
-
-    <form name="productForm">
+    <form>
         <div class="form-group">
-            <label for="name">Название</label>
-            <input type="text" id="name" name="name">
+            <label>Имя</label>
+            <input type="text" name="firstNameInput" required>
         </div>
-
         <div class="form-group">
-            <label for="price">Цена</label>
-            <input type="text" id="price" name="price">
+            <label>Фамилия</label>
+            <input type="text" name="lastNameInput" required>
         </div>
-
         <div class="form-group">
-            <label for="currency">Валюта</label>
-            <select id="currency" name="currency"></select>
+            <label>Email</label>
+            <input type="email" name="emailInput" required>
         </div>
-        <br>
-        <input id="saveButton" type="button" value="Сохранить">
+        <div class="form-group">
+            <label>Пароль</label>
+            <input type="password" name="passwordInput" required minlength="6" maxlength="16">
+        </div>
+        <div class="form-group">
+            <label>Подтверждение пароля</label>
+            <input type="password" name="passwordConfirmInput" required minlength="6" maxlength="16">
+        </div>
+        <div class="form-group">
+            <input type="checkbox" name="acceptedInput" required>
+            <label class="inline">Согласен с условиями использования</label>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Зарегистрироваться">
+        </div>
     </form>
 
-    <table id="productsTable">
-
-    </table>
 
     <script>
-        /*
-        Задание:
-        Поменяйте radio на select с вариантами валют -
-        value - USD, текст для пользователя - U.S. Dollar
-        value - RUB, текст для пользователя - Russian Ruble
-        value - UAH, текст для пользователя - Ukrainian Hryvnia
-        value - EUR, текст для пользователя - Euro
-        value - PLN, текст для пользователя - Polish Zloty
-        value - CHF, текст для пользователя - Swiss Franc
+        const form = document.forms[0];
 
-        Поведение функции addRow не должно измениться
-        */
-        let productForm = document.forms.productForm;
-        let productsTable = document.querySelector("#productsTable");
-        let saveButton = document.querySelector("#saveButton");
-        let currencySelect = document.querySelector("#currency"); 
-
-        let usd = document.createElement("option");
-        usd.value = "USD";
-        usd.textContent = "U.S. Dollar";
-        currencySelect.append(usd);
-
-        let rub = document.createElement("option");
-        rub.value = "RUB";
-        rub.textContent = "Russian Ruble";
-        currencySelect.append(rub);
-
-        let uah = document.createElement("option");
-        uah.value = "UAH";
-        uah.textContent = "Ukrainian Hryvnia";
-        currencySelect.append(uah);
-
-        let eur = document.createElement("option");
-        eur.value = "EUR";
-        eur.textContent = "Euro";
-        currencySelect.append(eur);
-
-        let pln = document.createElement("option");
-        pln.value = "PLN";
-        pln.textContent = "Polish Zloty";
-        currencySelect.append(pln);
-
-        let chf = document.createElement("option");
-        chf.value = "CHF";
-        chf.textContent = "Swiss Franc";
-        currencySelect.append(chf);
-
-
-        saveButton.addEventListener("click", function () {
-            addRow(productForm.name.value,
-                productForm.price.value,
-                productForm.currency.value); 
-
-            for (let i = 0; i < productForm.elements.length; i++) {
-                const element = productForm.elements[i];
-                if (element.type == "text") element.value = "";
+        form.addEventListener("submit", function (e) {
+            alert("Форма отправлена");
+        });
+        form.emailInput.addEventListener("input", function(){
+            if(form.emailInput.value == "admin@example.com" || form.emailInput.value == "superuser@example.com" || form.emailInput.value == "user@example.com"){
+                form.emailInput.setCustomValidity("Запрещенное значение");
             }
+        })
+        form.passwordConfirmInput.addEventListener("input", function (e) {
+            
+            if (form.passwordConfirmInput.value != form.passwordInput.value) {
+                form.passwordConfirmInput.setCustomValidity("Пароль и подтверждение пароля не совпадают.");
+                form.passwordInput.setCustomValidity("Пароль и подтверждение пароля не совпадают.");
+            }
+            else {
+                form.passwordConfirmInput.setCustomValidity(""); 
+                form.passwordInput.setCustomValidity("");
+            }
+
         });
 
-        function addRow(name, price, currency) {
-            let tr = document.createElement("tr");
-            tr.insertAdjacentHTML("beforeend", `<td>${name}</td>`);
-            tr.insertAdjacentHTML("beforeend", `<td>${price}</td>`);
-            tr.insertAdjacentHTML("beforeend", `<td>${currency}</td>`);
-            productsTable.append(tr);
-        }
-
+        /*
+        Задание:
+        Доработайте валидацию формы. Поле ввода Email не должно содержать значения
+        admin@example.com, superuser@example.com и user@example.com
+        Во время ввода значений в поле ввода email выполняйте проверку введенного значения и если
+        значение совпадает с запрещенным, выводите сообщение об этом рядом с полем ввода.
+        Проверку выполняйте на событие input
+        */
     </script>
 </body>
 

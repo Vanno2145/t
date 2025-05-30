@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task 01</title>
     <style>
-        .form-grop {
+        .form-group {
             margin: 4px;
         }
 
-        .form-grop label {
+        .form-group label {
             width: 75px;
             display: inline-block;
         }
@@ -19,38 +19,57 @@
 </head>
 
 <body>
-    <form >
-        <div class="form-grop">
+    <form>
+        <div class="form-group">
             <label>Логин</label>
-            <input type="text" name="loginInput">
+            <input type="text" name="login">
+            <span class="hint" id="loginHint">Ваш логин должен состоять не менее чем из 4 символов</span>
         </div>
-        <div class="form-grop">
+        <div class="form-group">
             <label>Пароль</label>
-            <input type="password" name="passwordInput">
+            <input type="password" name="password">
+            <span class="hint" id="passwordHint">Пароль должен содержать буквы, цифры и специальный символ</span>
         </div>
-        <div class="form-grop">
-            <label>Имя</label>
-            <input type="text" name="nameInput">
-        </div>
-        <div class="form-grop">
-            <label>Фамилия</label>
-            <input type="text" name="lastNameInput">
-        </div>
-        <div class="form-grop">
-            <input type="button" value="Отобразить значения">
+
+        <div class="form-group">
+            <input type="submit" value="Зарегистрироваться">
         </div>
     </form>
     <script>
         /*
         Задание:
-        При нажатии на кнопку "Отобразить значения", используя цикл for, выведите значения всех элементов управления input (кроме input type=button), на консоль.
+        1. При нажатии на кнопку "Зарегистрироваться" (не используя события click) выведите с помощью alert
+        информацию, которую ввел пользователь в поля login и password.
+        2. В момент, когда поле ввода login получает фокус, покажите подсказку, которая находится в span#loginHint
+           В момент, когда фокус получает поле ввода password - подсказку span#passwordHint
         */
-
         let form = document.forms[0]
 
-        document.querySelector(".form-grop:last-child").addEventListener("click", function(){for(let i = 0; i < form.length - 1; i++){
-            console.log(form[i].value)
-        }})
+        let logi = form.elements.login
+        let passi = form.elements.password
+        let login = document.getElementById("loginHint");
+        let pass = document.getElementById("passwordHint");
+
+        form.addEventListener("submit", function(e){
+            alert(`password:${logi.value}\nlogin:${passi.value}`)
+        })
+
+        logi.addEventListener("focus", function(e){
+            login.style.color = "red"
+        })
+
+        logi.addEventListener("blur", function(e){
+            login.style.color = "black"
+        })
+
+        passi.addEventListener("focus", function(e){
+            pass.style.color = "red"
+        })
+
+        passi.addEventListener("blur", function(e){
+            pass.style.color = "black"
+        })
+    
     </script>
 </body>
 
