@@ -6,46 +6,49 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task 02</title>
-    <style>
-        .form-group {
-            margin: 4px;
-        }
-
-        .form-group label {
-            width: 75px;
-            display: inline-block;
-        }
-    </style>
 </head>
 
 <body>
-    <form>
-        <div class="form-group">
-            <label>Логин</label>
-            <input type="text" name="login" required minlength="4">
-        </div>
-        <div class="form-group">
-            <label>Пароль</label>
-            <input type="password" name="password">
-        </div>
-
-        <div class="form-group">
-            <input type="submit" value="Зарегистрироваться" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*]).{6,}">
-        </div>
-    </form>
-    
     <script>
         /*
         Задание:
-        Добавьте валидацию формы:
-        Поле ввода логина обязательное и должно содержать не менее 4 символов
-        Поле ввода пароля должно содержать строковое значение, состоящие не менее чем из 6 символов букв в нижнем и верхнем 
-        регистре, цифры и спец символа.
+        Напишите сценарий, который будет обновлять сущность post со свойствами
+        id: 1,
+        title: 'foo',
+        body: 'bar',
+        userId: 1,
 
-        Проверку нужно организовать с помощью встроенной валидации.
-        Регулярное выражение для проверки пароля - (?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*]).{6,}
+        Создайте форму с полем ввода для значения свойства title и полем ввода для значения свойства body
+
+        Значения для свойств title и body получите от пользователя
+        Значения id и userId должны остаться равными 1 и выводить их в форме не нужно.
+        При загрузке сценария заполните форму данными получеными при обработке GET запроса на https://jsonplaceholder.typicode.com/posts/1
+
+        адрес для отправки запроса
+        https://jsonplaceholder.typicode.com/posts/1
+
+        для обновления сущности воспользуйтесь PUT запросом https://jsonplaceholder.typicode.com/posts/1. Обработайте ответ
+        и выведите информацию о ошибке или об успешно завершенной операции.
         */
+        let url = 'https://jsonplaceholder.typicode.com/posts/1'
+        let post = {
+            id: 1,
+            title: 'foo',
+            body: 'bar',
+            userId: 1,
+        }
 
+        let tit = document.createElement("input")
+        tit.placeholder = "Title"
+        let bod = document.createElement("input")
+        bod.placeholder = "Body"
+
+        document.body.append(tit, bod)
+
+        fetch(url).then(response => response.json()).then(json => {
+                tit.value = post.title
+                tit.value = post.body
+        })
     </script>
 </body>
 

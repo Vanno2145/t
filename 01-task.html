@@ -6,70 +6,41 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Task 01</title>
-    <style>
-        .form-group {
-            margin: 4px;
-        }
-
-        .form-group label {
-            width: 75px;
-            display: inline-block;
-        }
-    </style>
 </head>
 
 <body>
-    <form>
-        <div class="form-group">
-            <label>Логин</label>
-            <input type="text" name="login">
-            <span class="hint" id="loginHint">Ваш логин должен состоять не менее чем из 4 символов</span>
-        </div>
-        <div class="form-group">
-            <label>Пароль</label>
-            <input type="password" name="password">
-            <span class="hint" id="passwordHint">Пароль должен содержать буквы, цифры и специальный символ</span>
-        </div>
-
-        <div class="form-group">
-            <input type="submit" value="Зарегистрироваться">
-        </div>
-    </form>
+    <button id="button1">Запрос</button>
+    <div id="output"></div>
     <script>
         /*
         Задание:
-        1. При нажатии на кнопку "Зарегистрироваться" (не используя события click) выведите с помощью alert
-        информацию, которую ввел пользователь в поля login и password.
-        2. В момент, когда поле ввода login получает фокус, покажите подсказку, которая находится в span#loginHint
-           В момент, когда фокус получает поле ввода password - подсказку span#passwordHint
+        Добавьте обработку статус кодов ошибок на стороне сервера и на стороне клиента
+        для сетевого запроса, который выполняется при нажатии на кнопку "Запрос" 
         */
-        let form = document.forms[0]
+        let button1 = document.querySelector("#button1");
+        let output = document.querySelector("#output");
+        let url = "https://jsonplaceholder.typicode.com/todos/100000";
 
-        let logi = form.elements.login
-        let passi = form.elements.password
-        let login = document.getElementById("loginHint");
-        let pass = document.getElementById("passwordHint");
-
-        form.addEventListener("submit", function(e){
-            alert(`password:${logi.value}\nlogin:${passi.value}`)
-        })
-
-        logi.addEventListener("focus", function(e){
-            login.style.color = "red"
-        })
-
-        logi.addEventListener("blur", function(e){
-            login.style.color = "black"
-        })
-
-        passi.addEventListener("focus", function(e){
-            pass.style.color = "red"
-        })
-
-        passi.addEventListener("blur", function(e){
-            pass.style.color = "black"
-        })
-    
+        button1.addEventListener("click", function () {
+            fetch(url)
+                .then(response => response.json())
+                .then(json => {
+                    if (!json.ok) { 
+                        if (json.status >= 400 && json.status < 500) {
+                            console.log(`Статус ${json.status}`);
+                        }else if (json.status >= 500 && json.status < 600) {
+                            console.log(`Статус ${json.status}`);
+                        }
+                          
+                    }
+                        
+                    output.innerHTML = "";
+                    output.innerHTML += "<br>id: " + json.id;
+                    output.innerHTML += "<br>user id: " + json.userId;
+                    output.innerHTML += "<br>title: " + json.title;
+                    output.innerHTML += "<br>completed: " + json.completed;
+                });
+        });
     </script>
 </body>
 
